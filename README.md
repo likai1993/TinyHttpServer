@@ -42,6 +42,13 @@ tiny_http_server.vcxproj
 makefile
     This is a makefile 
 ```
+
+Below are the extensions made by Kai Li:
+```
+tiny_http_server.cc  add commands. (e.g., bind to an IP, redirection)
+http_server.cc       add HTTP methods, (e.g., DELETE) add HTTP response code, (e.g., 302 Found, 304 Not Modified)
+gen_utils.cc         add time conversion (from string to mktime) and comparison functions.
+```
 Author: A. Calderone - acaldmail@gmail.com
 
 Co-Author: Kai Li - recarelee@gmail.com
