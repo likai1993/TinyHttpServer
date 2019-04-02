@@ -16,7 +16,7 @@ TinyHttpServer is a lightweight web server implemented in C++11
 The aim is to give a simple example to demonstrate what 
 C++11 has to offer.
 
-###TinyHttpServer project depends on the following source files:
+TinyHttpServer project depends on the following source files:
 ```
 gen_utils.cc	Collection of general purpose utilities
 gen_utils.h	Declaration of collection of general purpose utilities
