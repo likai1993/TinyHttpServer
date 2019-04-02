@@ -42,6 +42,6 @@ tiny_http_server.vcxproj
 makefile
     This is a makefile 
 ```
-Author A. Calderone - acaldmail@gmail.com
+Author: A. Calderone - acaldmail@gmail.com
 
-Co-Author Kai Li - recarelee@gmail.com
+Co-Author: Kai Li - recarelee@gmail.com
