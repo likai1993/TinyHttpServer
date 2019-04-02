@@ -116,8 +116,9 @@ public:
         std::cout << "\t\t-w | --webroot <working_dir_path>\n";
         std::cout << "\t\t\tSet a local working directory (default is "
            << HTTP_SERVER_WROOT << ") \n";
-        std::cout << "\t\t-r | --redirect\n";
-        std::cout << "\t\t\tEnable redirect mode (302)\n";
+        std::cout << "\t\t-r | --redirect <ip  address>\n";
+        std::cout << "\t\t\tEnable redirect mode (302) (default is " 
+	   << HTTP_SERVER_ADDR << ") \n";
         std::cout << "\t\t-vv | --verbstd::coute\n";
         std::cout << "\t\t\tEnable logging on stderr\n";
         std::cout << "\t\t-v | --version\n";
