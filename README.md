@@ -16,8 +16,8 @@ TinyHttpServer is a lightweight web server implemented in C++11
 The aim is to give a simple example to demonstrate what 
 C++11 has to offer.
 
-TinyHttpServer project depends on the following source files:
-
+###TinyHttpServer project depends on the following source files:
+```
 gen_utils.cc	Collection of general purpose utilities
 gen_utils.h	Declaration of collection of general purpose utilities
 http_config.h   HTTP Server configuration file
@@ -30,16 +30,18 @@ socket_utils.cc Implementation of socket classes containing
                 some useful stuff cross-platform for manipulating socket
 socket_utils.h  Declaration of socket classes containing some useful stuff 
                 cross-platform for manipulating socket 
-
+```
+```
 tiny_http_server.vcxproj
     This is the main project file for VC++ projects generated using an Application Wizard.
     It contains information about the version of Visual C++ that generated the file, and
     information about the platforms, configurations, and project features selected with the
     Application Wizard.
-
+```
+```
 makefile
     This is a makefile 
-
+```
 Author A. Calderone - acaldmail@gmail.com
 
 Co-Author Kai Li - recarelee@gmail.com
