@@ -18,6 +18,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  US
  *
  *  Author:	Antonino Calderone, <acaldmail@gmail.com>
+ *  CO-Author:	Kai Li, <recarelee@gmail.com>
  *
  *  This work was updated and extended by Kai Li, for the purpose of demostrating
  *  the final project of CSE775 - Distributed Object.
@@ -56,7 +57,7 @@ void http_request_t::parse_method(const std::string& method)
     else if (method == "POST")
         _method = method_t::POST;
     else if (method == "DELETE")
-        _method = method_t::DELETE;  //TODO add DELETE method
+        _method = method_t::DELETE;
      else
         _method = method_t::UNKNOWN;
 }
@@ -100,14 +101,13 @@ std::ostream& http_request_t::dump(std::ostream& os, const std::string& id)
 // http_response_t
 // -----------------------------------------------------------------------------
 
-
 void http_response_t::format_error(
     std::string& output, int code, const std::string& msg)
 {
     std::string scode = std::to_string(code);
 
     std::string error_html = "<html><head><title>" + scode + " " + msg
-        + "</title></head>" + "<body>Forbidden</body></html>\r\n";
+        + "</title></head>" + "<body>"+ msg + "</body></html>\r\n";
 
     output = "HTTP/1.1 " + scode + " " + msg + "\r\n";
     output += "Date: " + gen_utils::get_local_time() + "\r\n";
@@ -116,6 +116,31 @@ void http_response_t::format_error(
     output += "Connection: Keep-Alive\r\n";
     output += "Content-Type: text/html\r\n\r\n";
     output += error_html;
+  
+}
+
+
+// -----------------------------------------------------------------------------
+// Reply body to a DELETE method 
+// -----------------------------------------------------------------------------
+
+
+void http_response_t::format_delete(
+    std::string& output, int code, const std::string& msg)
+{
+    std::string scode = std::to_string(code);
+
+    std::string error_html = "<html><head><title>" + scode + " " + msg
+        + "</title></head>" + "<body>File deleted.</body></html>\r\n";
+
+    output = "HTTP/1.1 " + scode + " " + msg + "\r\n";
+    output += "Date: " + gen_utils::get_local_time() + "\r\n";
+    output += "Server: " HTTP_SERVER_NAME "\r\n";
+    output += "Content-Length: " + std::to_string(error_html.size()) + "\r\n";
+    output += "Connection: Keep-Alive\r\n";
+    output += "Content-Type: text/html\r\n\r\n";
+    output += error_html;
+         
 }
 
 
@@ -143,7 +168,7 @@ http_response_t::http_response_t(
 {
     if (request.get_method() == http_request_t::method_t::UNKNOWN) {
         format_error(_response, 403, "Forbidden");
-	set_status_code(403);
+        set_status_code(403);
         return;
     }
 
@@ -153,9 +178,28 @@ http_response_t::http_response_t(
     };
 
     _local_uri_path = request.get_uri();
-    rpath(_local_uri_path);
-    _local_uri_path = web_root + _local_uri_path;
+  
+    std::string md5_path;
+    gen_utils::get_path_by_md5sum(_local_uri_path, md5_path);
 
+    rpath(_local_uri_path);
+    //_local_uri_path = web_root + _local_uri_path;
+    _local_uri_path = web_root + md5_path;
+    std::cout << "local path:"<< _local_uri_path << std::endl;
+
+    if (request.get_method() == http_request_t::method_t::DELETE) {
+	if (remove(_local_uri_path.c_str()) != 0 ){
+		format_error(_response, 403, "Forbidden");
+        	set_status_code(403);
+	}
+	else{
+	        format_delete(_response, 200, "OK");	
+        	set_status_code(200);
+	}
+        return;
+    }
+
+    // 304 specific
     std::string request_file_time, file_time, mimekey, response_head;
     const std::string header_field_name = "If-Modified-Since";
     get_header_by_name(request, header_field_name, request_file_time);
@@ -176,7 +220,6 @@ http_response_t::http_response_t(
         _response
             += it != _mime_tbl.end() ? it->second : "application/octet-stream";
 
-        // Resolve mime type using the uri/file extension
         // Close the rensponse header by using the sequence CRFL twice
         _response += "\r\n\r\n";
 
@@ -201,17 +244,18 @@ http_response_t::http_response_t(
 
         _response = response_head + _response;
 
-    } else if (redirect_mode) // 302 redirect 
+    } else if (redirect_mode) // 302 redirection 
     {
 	 set_status_code(302);
 	 _response = "HTTP/1.1 302 Found\r\n";
     	 _response += "Date: " + gen_utils::get_local_time() + "\r\n";
     	 _response += "Server: " HTTP_SERVER_NAME "\r\n";
   	 _response += "Location: http://" + backend_server_addr + request.get_uri() + "\r\n";
+
         // Close the rensponse header by using the sequence CRFL twice
          _response += "\r\n\r\n";
     }
-    else{ 
+    else{// file not found
          format_error(_response, 404, "Not Found");
          set_status_code(404);
     }
@@ -353,7 +397,8 @@ class http_server_task_t {
 private:
     std::ostream& _logger;
     bool _verbose_mode = true;
-    bool _redirect_mode = true;
+    bool _redirect_mode = false;
+
     tcp_socket_t::handle_t _tcp_socket_handle;
     std::string _web_root;
     std::string _backend_server_addr;
@@ -441,8 +486,9 @@ void http_server_task_t::operator()(handle_t task_handle)
         // Send the response to remote peer
         http_socket << response;
 
-        // If HTTP command line method isn't HEAD then send requested URI
-        if (http_request->get_method() != http_request_t::method_t::HEAD && response.get_status_code() != 304 ) {
+        // Iff HTTP command line method is Get and status code = 200, then send file 
+        if (http_request->get_method() != http_request_t::method_t::HEAD && 
+            http_request->get_method() != http_request_t::method_t::DELETE  && response.get_status_code() == 200 ) {
             if (0 > http_socket.send_file(response.get_local_uri_path())) {
                 if (verbose_mode())
                     log() << transaction_id() << "[Error!] sending '"
@@ -552,7 +598,7 @@ bool http_server_t::run()
         assert(_logger_ptr);
 
         http_server_task_t::handle_t task_handler = http_server_task_t::create(
-            _verbose_mode, *_logger_ptr, handler, get_web_root(), _redirect_mode, get_backend_server_addr());
+            _verbose_mode, *_logger_ptr, handler, get_web_root(), redirect_mode(), get_backend_server_addr());
 
         // Coping the http_server_task handle (shared_ptr) the reference
         // count is automatically increased by one

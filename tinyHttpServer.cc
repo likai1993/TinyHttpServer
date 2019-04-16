@@ -18,6 +18,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  US
  *
  *  Author:	Antonino Calderone, <acaldmail@gmail.com>
+ *  CO-Author:	Kai Li, <recarelee@gmail.com>
  *  
  *  This work was updated and extended by Kai Li, for the purpose of demostrating
  *  the final project of CSE775 - Distributed Object.
@@ -231,10 +232,18 @@ int main(int argc, char* argv[])
         return 0;
     }
 
+
+    /* invoke get_instance() multiple times */
+
     http_server_t& httpserver = http_server_t::get_instance();
+    std::cout << "Http server instance address:" << &httpserver << std::endl;
+
+    http_server_t& httpserver1 = http_server_t::get_instance();
+    std::cout << "Http server instance address:" << &httpserver1 << std::endl;
 
     httpserver.set_web_root(args.get_web_root());
 
+    if (args.redirect_mode())
     httpserver.set_backend_server(args.get_http_backend_server_addr());
 
     bool res = httpserver.bind(args.get_http_server_addr(), args.get_http_server_port());

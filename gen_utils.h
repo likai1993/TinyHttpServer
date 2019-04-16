@@ -18,6 +18,7 @@
 *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  US
 *
 *  Author:	Antonino Calderone, <acaldmail@gmail.com>
+*  CO-Author:	Kai Li, <recarelee@gmail.com>
 *
 *  This work was updated and extended by Kai Li, for the purpose of demostrating
 *  the final project of CSE775 - Distributed Object.
@@ -84,8 +85,20 @@ void get_local_time(std::string& local_time);
  *
  * t1 > t2, return true, otherwise return false 
  */
-
 bool compare_time(time_t& t1, time_t& t2);
+
+
+// ------------------------------------------------------------------------
+
+
+/**
+ * Calculate the MD5 hash of the given string first, then construct the searching
+ * path by placing the first heximal character as the first level sub-
+ * directory, placing the second and third character as the second level
+ * sub-direcroty and appending the request_uri. 
+ * @param path will contain the local searching path 
+ */
+void get_path_by_md5sum(std::string& str, std::string& path);
 
 
 // ------------------------------------------------------------------------
@@ -98,8 +111,9 @@ bool compare_time(time_t& t1, time_t& t2);
  *
  * @param t will contain the time in mktime format
  */
-
 void str2time(std::string& time, time_t& t);
+
+
 // ------------------------------------------------------------------------
 
 

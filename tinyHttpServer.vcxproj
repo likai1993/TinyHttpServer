@@ -92,7 +92,7 @@
     <ClCompile Include="http_server.cc" />
     <ClCompile Include="os_dep.cc" />
     <ClCompile Include="socket_utils.cc" />
-    <ClCompile Include="tiny_http_server.cc" />
+    <ClCompile Include="tinyHttpServer.cc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -18,6 +18,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  US
  *
  *  Author:	Antonino Calderone, <acaldmail@gmail.com>
+ *  CO-Author:	Kai Li, <recarelee@gmail.com>
  *
  *  This work was updated and extended by Kai Li, for the purpose of demostrating
  *  the final project of CSE775 - Distributed Object.
@@ -29,10 +30,10 @@
 
 // -----------------------------------------------------------------------------
 
-
 #include "gen_utils.h"
 #include "os_dep.h"
-
+#include <openssl/md5.h>
+#include <stdio.h>
 
 // -----------------------------------------------------------------------------
 
@@ -62,6 +63,38 @@ bool gen_utils::compare_time(time_t& t1, time_t& t2)
    return seconds >= 0 ? true : false;
 
 }
+
+
+// -----------------------------------------------------------------------------
+
+
+void gen_utils::get_path_by_md5sum(std::string& str, std::string& path)
+{
+    unsigned char temp_hash[MD5_DIGEST_LENGTH];
+    printf("%s\n",str.c_str());
+    MD5((unsigned char*)str.c_str(), str.length(), temp_hash);
+
+    char c_path_prefix[10];
+    /* 
+    for(int i=0; i <MD5_DIGEST_LENGTH; i++) {
+            printf("%02x",temp_hash[i]);
+    }
+    printf("\n");
+    */
+
+    /* get the first and second heximal character from temp_hash[0] */
+    sprintf(c_path_prefix,"%02x",temp_hash[0]);
+    std::string path_prefix(c_path_prefix);
+    path = path_prefix.substr(0,1) + "/" + path_prefix.substr(1,1);
+
+    /* get the third character from temp_hash[1] */
+    sprintf(c_path_prefix,"%02x",temp_hash[1]);
+    std::string path_prefix1(c_path_prefix); 
+
+    /* construct the searching path */
+    path += path_prefix1.substr(0,1) + str;
+}
+
 
 
 // -----------------------------------------------------------------------------

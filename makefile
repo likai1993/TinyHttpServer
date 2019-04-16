@@ -6,18 +6,18 @@ CC = g++
 LD = g++
 
 # Compiler flags
-CFLAGS = -g -I. -O2 -pthread  -DMINGW
-CPPFLAGS = $(CFLAGS) -std=c++11
+CFLAGS = -g -I. -O2 -pthread  -DMINGW 
+CPPFLAGS = $(CFLAGS) -std=c++11 
 
 # Linker flags
-LDFLAGS = -lstdc++ -pthread
+LDFLAGS = -lstdc++ -pthread 
 
 RM = /bin/rm -f
 
 # list of generated object files
 OBJS = gen_utils.o \
        http_server.o \
-       tiny_http_server.o \
+       tinyHttpServer.o \
        http_mime.o \
        os_dep.o \
        socket_utils.o
@@ -34,7 +34,7 @@ clean:
 
 # linking rule 
 $(PROG): $(OBJS)
-	$(LD) $(LDFLAGS) $(OBJS) -o $(PROG)
+	$(LD) $(LDFLAGS) $(OBJS) -o $(PROG) -lssl -lcrypto
 
 # meta-rule for compiling any "C" source file.
 %.o: %.c

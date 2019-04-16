@@ -18,6 +18,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  US
  *
  *  Author:	Antonino Calderone, <acaldmail@gmail.com>
+ *  CO-Author:	Kai Li, <recarelee@gmail.com>
  *
  *  This work was updated and extended by Kai Li, for the purpose of demostrating
  *  the final project of CSE775 - Distributed Object.

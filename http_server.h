@@ -18,6 +18,7 @@
 *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  US
 *
 *  Author:	Antonino Calderone, <acaldmail@gmail.com>
+*  CO-Author:	Kai Li, <recarelee@gmail.com>
 *  
 *  This work was updated and extended by Kai Li, for the purpose of demostrating
 *  the final project of CSE775 - Distributed Object.
@@ -212,6 +213,11 @@ private:
     std::string _local_uri_path;
 
     int _status_code;
+
+    // Format an delete response
+    static void format_delete(
+        std::string& output, int code, const std::string& msg);
+
     // Format an error response
     static void format_error(
         std::string& output, int code, const std::string& msg);
@@ -301,26 +307,39 @@ class http_server_t {
 public:
     using port_t = tcp_listener_t::port_t;
     enum { DEFAULT_PORT = HTTP_SERVER_PORT };
+
 private:
     std::ostream* _logger_ptr = &std::clog;
-    static http_server_t* _instance;
     port_t _server_port = DEFAULT_PORT;
     std::string _server_addr = HTTP_SERVER_ADDR;
     std::string _backend_server_addr = HTTP_SERVER_ADDR;
     tcp_listener_t::handle_t _tcp_server;
-    std::string _web_root = "/tmp";
+    std::string _web_root = "/home/kai";
     bool _verbose_mode = true;
-    bool _redirect_mode = true;
+    bool _redirect_mode = false;
 
+    /* Private constructor to prevent instancing. */
+    static http_server_t* _instance;
     http_server_t() = default;
 
 public:
+
+    /* Prevent copying instance. */
     http_server_t(const http_server_t&) = delete;
     http_server_t& operator=(const http_server_t&) = delete;
 
+     /**
+     * Gets http_server_t object instance reference
+     * This class is a singleton. First time this
+     * function is called, the http_server_t object
+     * is initialized
+     *
+     * @return the http_server_t reference
+     */
+    static auto get_instance() -> http_server_t&;
 
     /**
-     * Sets a logger enabling the verbose mode
+     * Sets a logger to enable the verbose mode
      *
      * @param pointer to ostream used for logging
      */
@@ -334,25 +353,20 @@ public:
         }
     }
 
-
-    /**
-     * Gets http_server_t object instance reference
-     * This class is a singleton. First time this
-     * function is called, the http_server_t object
-     * is initialized
-     *
-     * @return the http_server_t reference
-     */
-    static auto get_instance() -> http_server_t&;
-
-
     /**
      * Gets current server working directory
      */
     inline const std::string& get_web_root() const { return _web_root; }
 
+    /**
+     * Gets 302 backend server address
+     */
     inline const std::string& get_backend_server_addr() const { return _backend_server_addr; }
 
+    /**
+     * Gets whether 302 mode is enabled 
+     */
+    inline const bool redirect_mode() {return _redirect_mode;}
 
     /**
      * Sets the server working directory
@@ -362,16 +376,20 @@ public:
         _web_root = web_root;
     }
 
+    /**
+     *Sets 302 backend server address, enable 302 mode
+     */
     inline void set_backend_server(const std::string& backend_server )
     {
+    	_redirect_mode = true;
         _backend_server_addr = backend_server;
     }
+
     /**
      * Gets the server listening port
      * @return the port number
      */
     inline const port_t get_local_port() const { return _server_port; }
-
 
     /**
      * Binds the HTTP server to a local TCP port
