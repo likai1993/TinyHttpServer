@@ -1,9 +1,0 @@
-Http server instance address:0xb5fd30
-Http server instance address:0xb5fd30
-Wed Apr 10 00:08:01 2019
-TinyHttpServer is listening on TCP port 8080, IP:128.230.215.187
-Web Root dir is '/home/kai/http_test/'
-Redirect mode:0
-current worker thread ID :140216650585856
-/index.html
-local path:/home/kai/http_test/d/15/index.html

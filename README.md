@@ -45,9 +45,9 @@ makefile
 
 Below are the extensions made by Kai Li:
 ```
-tiny_http_server.cc  add commands. (e.g., bind to an IP, redirection)
-http_server.cc       add HTTP methods, (e.g., DELETE) add HTTP response code, (e.g., 302 Found, 304 Not Modified)
-gen_utils.cc         add time conversion (from string to mktime) and comparison functions.
+tiny_http_server.cc  add command-line options. (e.g., -a: bind to an IP, -r: 302 redirection)
+http_server.cc       add HTTP methods, (e.g., DELETE) add HTTP response code. (e.g., 302 Found, 304 Not Modified)
+gen_utils.cc         add time conversion (from string to mktime) and comparison functions, add md5 path anonimity.
 ```
 Author: A. Calderone - acaldmail@gmail.com
 

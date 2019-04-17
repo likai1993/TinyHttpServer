@@ -85,7 +85,7 @@ void gen_utils::get_path_by_md5sum(std::string& str, std::string& path)
     /* get the first and second heximal character from temp_hash[0] */
     sprintf(c_path_prefix,"%02x",temp_hash[0]);
     std::string path_prefix(c_path_prefix);
-    path = path_prefix.substr(0,1) + "/" + path_prefix.substr(1,1);
+    path = "/" + path_prefix.substr(0,1) + "/" + path_prefix.substr(1,1);
 
     /* get the third character from temp_hash[1] */
     sprintf(c_path_prefix,"%02x",temp_hash[1]);
