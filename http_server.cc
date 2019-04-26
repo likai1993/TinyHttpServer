@@ -58,6 +58,8 @@ void http_request_t::parse_method(const std::string& method)
         _method = method_t::POST;
     else if (method == "DELETE")
         _method = method_t::DELETE;
+    else if (method == "PUT")
+        _method = method_t::PUT;
      else
         _method = method_t::UNKNOWN;
 }
@@ -174,9 +176,16 @@ http_response_t::http_response_t(
 
     if (request.get_method() == http_request_t::method_t::POST) {
 	std::string request_body = request.get_body();
-        std::cout << "[POST] Get a POST request from client\n" <<
-	request_body << std::endl;  	
+        std::cout << "[POST] request," << "[Body]: " << 
+	request_body << "\r\n\r\n";  	
         format_error(_response, 200, "OK");
+        set_status_code(200);
+        return;
+    }else if (request.get_method() == http_request_t::method_t::PUT) {
+	std::string request_body = request.get_body();
+        std::cout << "[PUT] request," << "[Body]: " <<
+	request_body << "\r\n\r\n";  	
+        format_error(_response, 202, "Accepted");
         set_status_code(200);
         return;
     }
@@ -337,13 +346,11 @@ http_request_t::handle_t http_socket_t::recv()
         if (ret > 0) {
             line += c;
         } else if (ret <= 0) {
-	    std::cout << "debug [1]"  << std::endl;
             _conn_up = false;
             break;
         }
 
         if (crlf(c)) {
-	    std::cout << "debug [2]" << line << std::endl;
             break;
         }
 
@@ -374,8 +381,27 @@ http_request_t::handle_t http_socket_t::recv()
     handle->parse_uri(tokens[1]);
     handle->parse_version(tokens[2]);
 
+    // Read body message from client's POST/Put request
+    if (tokens[0].compare("PUT") ==0 || tokens[0].compare("POST") == 0) {
+        char end_c = (tokens[0].compare("PUT")?'*':'}');
 
-    std::cout << "Method:" << tokens[0] << std::endl;
+        while (ret > 0 && _conn_up && _socket_handle) {
+        	ret = _socket_handle->recv(&c, 1);
+
+        	if (ret > 0) {
+        	    line += c;
+        	} else if (ret <= 0) {
+        	    _conn_up = false;
+        	    break;
+        	}
+
+        	if (c == end_c) {
+		    handle->set_body(line); 
+        	    break;
+        	}
+	}
+    } 
+
     return handle;
 }
 
@@ -500,8 +526,7 @@ void http_server_task_t::operator()(handle_t task_handle)
         http_socket << response;
 
         // Iff HTTP command line method is Get and status code = 200, then send file 
-        if (http_request->get_method() != http_request_t::method_t::HEAD && 
-            http_request->get_method() != http_request_t::method_t::DELETE  && response.get_status_code() == 200 ) {
+        if (http_request->get_method() == http_request_t::method_t::GET  && response.get_status_code() == 200 ) {
             if (0 > http_socket.send_file(response.get_local_uri_path())) {
                 if (verbose_mode())
                     log() << transaction_id() << "[Error!] sending '"

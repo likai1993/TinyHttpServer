@@ -5,5 +5,5 @@ PORT='8080'
 #Get 200 
 echo "curl -i "http://${ADDR}:${PORT}/non_exist.html""
 echo ""
-curl  -i "http://${ADDR}:${PORT}/non_exist.html"
+curl -i "http://${ADDR}:${PORT}/non_exist.html"
 exit 0

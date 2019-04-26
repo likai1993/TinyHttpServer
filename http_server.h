@@ -58,7 +58,7 @@ class http_request_t {
 public:
     using handle_t = std::shared_ptr<http_request_t>;
 
-    enum class method_t { GET, HEAD, POST, DELETE, UNKNOWN };
+    enum class method_t { GET, HEAD, POST, DELETE, PUT, UNKNOWN };
     enum class version_t { HTTP_1_0, HTTP_1_1, UNKNOWN };
 
     http_request_t() = default;
