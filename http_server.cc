@@ -172,6 +172,15 @@ http_response_t::http_response_t(
         return;
     }
 
+    if (request.get_method() == http_request_t::method_t::POST) {
+	std::string request_body = request.get_body();
+        std::cout << "[POST] Get a POST request from client\n" <<
+	request_body << std::endl;  	
+        format_error(_response, 200, "OK");
+        set_status_code(200);
+        return;
+    }
+
     auto rpath = [](std::string& s) {
         if (!s.empty() && s[0] != '/')
             s = "/" + s;
@@ -183,7 +192,6 @@ http_response_t::http_response_t(
     gen_utils::get_path_by_md5sum(_local_uri_path, md5_path);
 
     rpath(_local_uri_path);
-    //_local_uri_path = web_root + _local_uri_path;
     _local_uri_path = web_root + md5_path;
     std::cout << "local path:"<< _local_uri_path << std::endl;
 
@@ -225,6 +233,7 @@ http_response_t::http_response_t(
 
         if ( !request_file_time.empty()) {
     		std::cout << "request_file_time:" << request_file_time << std::endl;
+    		std::cout << "local file_time:" << file_time << std::endl;
 		time_t req_t, file_t;
 		gen_utils::str2time(request_file_time, req_t);
 		gen_utils::str2time(file_time, file_t); 
@@ -328,11 +337,13 @@ http_request_t::handle_t http_socket_t::recv()
         if (ret > 0) {
             line += c;
         } else if (ret <= 0) {
+	    std::cout << "debug [1]"  << std::endl;
             _conn_up = false;
             break;
         }
 
         if (crlf(c)) {
+	    std::cout << "debug [2]" << line << std::endl;
             break;
         }
 
@@ -342,8 +353,8 @@ http_request_t::handle_t http_socket_t::recv()
                 line.clear();
             }
         }
-    }
-
+      }
+  
     if (ret < 0 || !_socket_handle || handle->get_header().empty()) {
         return handle;
     }
@@ -363,6 +374,8 @@ http_request_t::handle_t http_socket_t::recv()
     handle->parse_uri(tokens[1]);
     handle->parse_version(tokens[2]);
 
+
+    std::cout << "Method:" << tokens[0] << std::endl;
     return handle;
 }
 

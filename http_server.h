@@ -88,6 +88,10 @@ public:
      */
     inline const std::string& get_uri() const { return _uri; }
 
+    /**
+     * Returns the request body, reserved for Put and Post request 
+     */
+    inline const std::string& get_body() const { return _body; }
 
     /**
      * Set HTTP method field decoding the string method
@@ -126,6 +130,16 @@ public:
         _header.push_back(new_header);
     }
 
+     /**
+     * Add a new body to request
+     *
+     * @param body The body content to add to body fields
+     */
+    inline void set_body(const std::string& body)
+    {
+        _body = body;
+    }
+
 
     /**
      * Prints the request out to the os stream
@@ -143,6 +157,7 @@ private:
     method_t _method = method_t::UNKNOWN;
     version_t _version = version_t::UNKNOWN;
     std::string _uri;
+    std::string _body; // reserverd for Put and Post request
 };
 
 

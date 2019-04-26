@@ -232,14 +232,8 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-
-    /* invoke get_instance() multiple times */
-
+    // invoke get_instance() multiple times to demo the singleton feature  
     http_server_t& httpserver = http_server_t::get_instance();
-    std::cout << "Http server instance address:" << &httpserver << std::endl;
-
-    http_server_t& httpserver1 = http_server_t::get_instance();
-    std::cout << "Http server instance address:" << &httpserver1 << std::endl;
 
     httpserver.set_web_root(args.get_web_root());
 
@@ -262,10 +256,10 @@ int main(int argc, char* argv[])
 
     std::cout << gen_utils::get_local_time() << std::endl
               //<< "Command line :'" << args.get_command_line() << "'"<< std::endl
-              << HTTP_SERVER_NAME << " is listening on TCP port "
+              << HTTP_SERVER_NAME << " is listening on port: "
               << args.get_http_server_port() << ", IP:"<< args.get_http_server_addr() << std::endl
-              << "Web Root dir is '" << args.get_web_root() << "'\n" 
-	      << "Redirect mode:"    << args.redirect_mode() << "\n";
+              << "Web Root: '" << args.get_web_root() << "'\n" 
+	      << "Enable 302 Redirect: "    << (args.redirect_mode()==1?"true":"false") << "\n";
 
     httpserver.set_logger(args.verbose_mode() ? &std::clog : nullptr);
 

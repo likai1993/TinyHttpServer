@@ -160,7 +160,7 @@ bool gen_utils::file_stat(const std::string& filename, std::string& date_time,
     int ret = stat(filename.c_str(), &rstat);
 
     if (ret >= 0) {
-        date_time = ctime(&rstat.st_atime);
+        date_time = ctime(&rstat.st_mtime);
         fsize = rstat.st_size;
 
         std::string::size_type pos = filename.rfind('.');
