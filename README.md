@@ -43,8 +43,8 @@ http_server.cc       add HTTP methods handler, (e.g., DELETE, POST, PUT); add HT
 gen_utils.cc         add time conversion (from string to mktime) and comparison functions, add md5 path anonimity feature.
 ```
 Author: A. Calderone - acaldmail@gmail.com
-
 Author: Kai Li - recarelee@gmail.com
+
 -------------------------------------------------------------------------------
 Testing
 -------------------------------------------------------------------------------
