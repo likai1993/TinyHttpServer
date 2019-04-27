@@ -45,8 +45,9 @@ gen_utils.cc         add time conversion (from string to mktime) and comparison 
 Author: A. Calderone - acaldmail@gmail.com
 
 Author: Kai Li - recarelee@gmail.com
-
-###Testing
+-------------------------------------------------------------------------------
+Testing
+-------------------------------------------------------------------------------
 1. Make
 ```bash
 make
