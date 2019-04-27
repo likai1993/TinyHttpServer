@@ -6,7 +6,7 @@ ROOT=/s3/tinyhttpbucket
 
 if [[ $1 -eq 1 ]]
 then
-	sudo ./tinyhttpserver  -a $IP -r $BACKEND -p $PORT -vv -w $ROOT 2>&1 	
+	sudo ./tinyhttpserver  -a $IP -r $BACKEND -p $PORT -w $ROOT 2>&1 	
 else
 	sudo ./tinyhttpserver  -a $IP -p $PORT -vv -w $ROOT 2>&1
 fi

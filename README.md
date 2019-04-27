@@ -32,13 +32,6 @@ socket_utils.h  Declaration of socket classes containing some useful stuff
                 cross-platform for manipulating socket 
 ```
 ```
-tiny_http_server.vcxproj
-    This is the main project file for VC++ projects generated using an Application Wizard.
-    It contains information about the version of Visual C++ that generated the file, and
-    information about the platforms, configurations, and project features selected with the
-    Application Wizard.
-```
-```
 makefile
     This is a makefile 
 ```
@@ -51,4 +44,38 @@ gen_utils.cc         add time conversion (from string to mktime) and comparison 
 ```
 Author: A. Calderone - acaldmail@gmail.com
 
-Co-Author: Kai Li - recarelee@gmail.com
+Author: Kai Li - recarelee@gmail.com
+
+###Testing
+1. Make
+```bash
+make
+```
+
+2. Run
+```bash
+sudo ./start.sh
+```
+
+3. start testing (open a new terminal)
+```bash
+cd ./demo
+./demo_200.sh
+./demo_304.sh
+./demo_403.sh
+./demo_404.sh
+./demo_POST.sh (back to the server console terminal to see its output)
+./demo_PUT.sh (back to the server console terminal to see its output)
+./demo_HEAD.sh
+./demo_DELETE.sh
+```
+
+4. To test 302 status code, go back to the terminal of step 3.
+```bash
+sudo ./stop.sh
+sudo ./start.sh 1 (1 means enable redirect mode)
+```
+then, open a new terminal and run the following command.
+```bash
+./demo_302.sh
+```

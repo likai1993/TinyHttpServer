@@ -185,7 +185,7 @@ http_response_t::http_response_t(
 	std::string request_body = request.get_body();
         std::cout << "[PUT] request," << "[Body]: " <<
 	request_body << "\r\n\r\n";  	
-        format_error(_response, 202, "Accepted");
+        format_error(_response, 200, "OK");
         set_status_code(200);
         return;
     }
