@@ -85,5 +85,6 @@ sudo ./start.sh 1 (1 means enable redirect mode)
 ```
 then open a new terminal and run the following command.
 ```bash
+cd ./demo
 ./demo_302.sh
 ```
