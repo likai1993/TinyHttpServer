@@ -53,6 +53,13 @@ Testing
 make
 ```
 
+2. Preparation
+```bash
+mkdir -p /s3/tinyhttpbucket
+touch /s3/tinyhttpbucket/d/15/index.html
+touch /s3/tinyhttpbucket/d/40/delete.html
+```
+
 2. Run
 ```bash
 sudo ./start.sh
@@ -65,8 +72,8 @@ cd ./demo
 ./demo_304.sh
 ./demo_403.sh
 ./demo_404.sh
-./demo_POST.sh (back to the terminal in step 2 to see its output)
-./demo_PUT.sh (back to the terminal in step 2 to see its output)
+./demo_POST.sh (back to the terminal in step 2 to see server's output)
+./demo_PUT.sh (back to the terminal in step 2 to see server's output)
 ./demo_HEAD.sh
 ./demo_DELETE.sh
 ```
