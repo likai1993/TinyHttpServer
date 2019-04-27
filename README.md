@@ -65,18 +65,18 @@ cd ./demo
 ./demo_304.sh
 ./demo_403.sh
 ./demo_404.sh
-./demo_POST.sh (back to the server console terminal to see its output)
-./demo_PUT.sh (back to the server console terminal to see its output)
+./demo_POST.sh (back to the terminal in step 2 to see its output)
+./demo_PUT.sh (back to the terminal in step 2 to see its output)
 ./demo_HEAD.sh
 ./demo_DELETE.sh
 ```
 
-4. To test 302 status code, go back to the terminal of step 3.
+4. To test 302 status code, go back to the terminal of step 2.
 ```bash
 sudo ./stop.sh
 sudo ./start.sh 1 (1 means enable redirect mode)
 ```
-then, open a new terminal and run the following command.
+then open a new terminal and run the following command.
 ```bash
 ./demo_302.sh
 ```
