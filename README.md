@@ -60,25 +60,25 @@ touch /s3/tinyhttpbucket/d/15/index.html
 touch /s3/tinyhttpbucket/d/40/delete.html
 ```
 
-2. Run
+3. Run
 ```bash
 sudo ./start.sh
 ```
 
-3. start testing (open a new terminal)
+4. start testing (open a new terminal)
 ```bash
 cd ./demo
 ./demo_200.sh
 ./demo_304.sh
 ./demo_403.sh
 ./demo_404.sh
-./demo_POST.sh (back to the terminal in step 2 to see server's output)
-./demo_PUT.sh (back to the terminal in step 2 to see server's output)
+./demo_POST.sh (back to the terminal in step 3 to see server's output)
+./demo_PUT.sh (back to the terminal in step 3 to see server's output)
 ./demo_HEAD.sh
 ./demo_DELETE.sh
 ```
 
-4. To test 302 status code, go back to the terminal of step 2.
+5. To test 302 status code, go back to the terminal of step 3.
 ```bash
 sudo ./stop.sh
 sudo ./start.sh 1 (1 means enable redirect mode)
